@@ -295,13 +295,9 @@ public class PlaybackInfoFilter : IAsyncActionFilter, IOrderedFilter
                     _logger.LogInformation("[DynamicLibrary] PlaybackInfo: Could not build stream URL from path {Path}", dynamicLibraryUrl);
                 }
 
-                // Don't fall through to Jellyfin's native handler for dynamiclibrary:// URLs
-                // as ffprobe can't handle the custom protocol
-                context.Result = new OkObjectResult(new PlaybackInfoResponse
-                {
-                    MediaSources = Array.Empty<MediaSourceInfo>(),
-                    PlaySessionId = Guid.NewGuid().ToString("N")
-                });
+                // Normal Jellyfin item (Live TV, local media, etc.).
+                // Let Jellyfin handle PlaybackInfo normally.
+                await next();
                 return;
             }
 
