@@ -4,7 +4,7 @@ A Jellyfin plugin that creates an "infinite library" by displaying content from 
 
 ## Prerequisites
 
-- Jellyfin 10.11.x or later
+- Jellyfin 12.0 or later (for Jellyfin 10.11.x use plugin version 1.4.0)
 - At least one metadata source:
   - [TVDB API key](https://thetvdb.com/api-information) - for TV shows and anime
   - [TMDB API key](https://www.themoviedb.org/settings/api) - for movies

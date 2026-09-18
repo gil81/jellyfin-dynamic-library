@@ -1,8 +1,8 @@
 name: "Dynamic Library"
 guid: "bc6b8d94-3800-4ab9-8f61-cf26ca1ab98c"
-version: "1.0.0"
-targetAbi: "10.11.0.0"
-framework: "net9.0"
+version: "1.5.0"
+targetAbi: "12.0.0.0"
+framework: "net10.0"
 owner: "pythcon"
 overview: "Browse and stream content from TMDB/TVDB without local files"
 description: >
@@ -13,6 +13,10 @@ category: "Metadata"
 artifacts:
   - "Jellyfin.Plugin.DynamicLibrary.dll"
 changelog: |-
+  ## 1.5.0
+  - Retargeted to Jellyfin 12.0 (.NET 10); requires Jellyfin 12.0 or later
+  - Jellyfin 10.11.x users should stay on 1.4.0
+
   ## 1.0.0
   - Initial release
   - TMDB and TVDB integration for movies, TV shows, and anime

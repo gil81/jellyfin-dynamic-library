@@ -20,7 +20,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
 
       - name: Restore dependencies
         run: dotnet restore Jellyfin.Plugin.DynamicLibrary/Jellyfin.Plugin.DynamicLibrary.csproj
@@ -39,7 +39,7 @@ jobs:
           echo "VERSION=${VERSION}" >> $GITHUB_ENV
 
           mkdir -p artifacts/DynamicLibrary
-          cp Jellyfin.Plugin.DynamicLibrary/bin/Release/net9.0/Jellyfin.Plugin.DynamicLibrary.dll artifacts/DynamicLibrary/
+          cp Jellyfin.Plugin.DynamicLibrary/bin/Release/net10.0/Jellyfin.Plugin.DynamicLibrary.dll artifacts/DynamicLibrary/
 
           # Create meta.json
           cat > artifacts/DynamicLibrary/meta.json << EOF
@@ -51,7 +51,7 @@ jobs:
             "owner": "pythcon",
             "category": "Metadata",
             "version": "${VERSION}.0",
-            "targetAbi": "10.11.0.0",
+            "targetAbi": "12.0.0.0",
             "status": "Active"
           }
           EOF
@@ -102,7 +102,7 @@ jobs:
           NEW_VERSION=$(jq -n \
             --arg version "${VERSION}.0" \
             --arg changelog "See GitHub releases for changelog" \
-            --arg targetAbi "10.11.0.0" \
+            --arg targetAbi "12.0.0.0" \
             --arg sourceUrl "https://github.com/pythcon/jellyfin-dynamic-library/releases/download/v${VERSION}/dynamic-library-${VERSION}.zip" \
             --arg checksum "${CHECKSUM}" \
             --arg timestamp "${TIMESTAMP}" \
