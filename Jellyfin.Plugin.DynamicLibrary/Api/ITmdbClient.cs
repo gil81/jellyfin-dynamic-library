@@ -5,6 +5,11 @@ namespace Jellyfin.Plugin.DynamicLibrary.Api;
 public interface ITmdbClient
 {
     /// <summary>
+    /// Get currently trending movies from TMDB.
+    /// </summary>
+    Task<IReadOnlyList<TmdbMovieResult>> GetTrendingMoviesAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
     /// Search for movies by title.
     /// </summary>
     Task<IReadOnlyList<TmdbMovieResult>> SearchMoviesAsync(string query, CancellationToken cancellationToken = default);
@@ -34,3 +39,4 @@ public interface ITmdbClient
     /// </summary>
     bool IsConfigured { get; }
 }
+

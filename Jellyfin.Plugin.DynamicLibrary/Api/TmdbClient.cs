@@ -59,6 +59,71 @@ public class TmdbClient : ITmdbClient
         return DynamicLibraryPlugin.Instance?.Configuration.GetTmdbLanguageCode();
     }
 
+    public async Task<IReadOnlyList<TmdbMovieResult>> GetTrendingMoviesAsync(
+        CancellationToken cancellationToken = default)
+    {
+        if (!IsConfigured)
+        {
+            _logger.LogDebug("TMDB client not configured, skipping trending movies");
+            return Array.Empty<TmdbMovieResult>();
+        }
+
+        const string cacheKey = "tmdb:trending:movies";
+
+        if (_cache.TryGetValue<IReadOnlyList<TmdbMovieResult>>(cacheKey, out var cachedResults)
+            && cachedResults != null)
+        {
+            return cachedResults;
+        }
+
+        try
+        {
+            var client = CreateClient();
+            var language = GetLanguageCode();
+            var languageParam =
+                !string.IsNullOrEmpty(language) ? $"&language={language}" : "";
+
+            var url =
+                AppendApiKey(
+                    $"{BaseUrl}/trending/movie/week?include_adult=false{languageParam}");
+
+            _logger.LogDebug("Fetching trending movies from TMDB");
+
+            var response = await client.GetAsync(url, cancellationToken);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                _logger.LogWarning(
+                    "TMDB trending movies failed: {StatusCode}",
+                    response.StatusCode);
+
+                return Array.Empty<TmdbMovieResult>();
+            }
+
+            var trendingResponse =
+                await response.Content.ReadFromJsonAsync<TmdbSearchResponse>(
+                    cancellationToken);
+
+            var results =
+                trendingResponse?.Results ?? new List<TmdbMovieResult>();
+
+            _cache.Set(
+                cacheKey,
+                (IReadOnlyList<TmdbMovieResult>)results,
+                CacheDuration);
+
+            _logger.LogDebug(
+                "TMDB trending movies returned {Count} results",
+                results.Count);
+
+            return results;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error fetching trending movies from TMDB");
+            return Array.Empty<TmdbMovieResult>();
+        }
+    }
     public async Task<IReadOnlyList<TmdbMovieResult>> SearchMoviesAsync(string query, CancellationToken cancellationToken = default)
     {
         if (!IsConfigured)
@@ -312,3 +377,4 @@ public class TmdbClient : ITmdbClient
         }
     }
 }
+

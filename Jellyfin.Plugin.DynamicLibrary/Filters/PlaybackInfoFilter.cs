@@ -1895,8 +1895,8 @@ public class PlaybackInfoFilter : IAsyncActionFilter, IOrderedFilter
             IsRemote = true,
             SupportsDirectPlay = true,
             SupportsDirectStream = false,  // Force Jellyfin to proxy - enables range requests for large files
-            SupportsTranscoding = false,
-            SupportsProbing = false,
+            SupportsTranscoding = true,
+            SupportsProbing = true,
             RequiresOpening = false,
             RequiresClosing = false,
             RunTimeTicks = runTimeTicks,
